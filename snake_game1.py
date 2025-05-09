@@ -1,8 +1,11 @@
 import pygame
 import random
 import math
-
+import sys
 # Initialize Pygame and mixer
+
+
+pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.init()
 pygame.mixer.init()
 
@@ -32,10 +35,16 @@ BASE_SNAKE_SPEED = 10
 # Font Style
 font_style = pygame.font.SysFont(None, 50)
 score_font = pygame.font.SysFont(None, 35)
+font = pygame.font.SysFont('Arial', 24)
+player_name = input("Please Enter you name: ")
+
+
 
 # Load sounds with error handling
 try:
-    eat_sound = pygame.mixer.Sound("eat.wav")
+    eat_sound = pygame.mixer.Sound("mamge.mp3")
+    eat_sound.play()
+    
     game_over_sound = pygame.mixer.Sound("game_over.wav")
 except pygame.error as e:
     print(f"Error loading sound files: {e}")
@@ -68,17 +77,30 @@ def our_snake(snake_block, snake_list):
             # Draw body as a green rectangle with a border
             pygame.draw.rect(dis, GREEN, [x[0], x[1], snake_block, snake_block])
             pygame.draw.rect(dis, (0, 100, 0), [x[0], x[1], snake_block, snake_block], 2)
+    
+    
+    
+    # display the name of the current play
+    
+def draw_player_name(name):
+    text_surface = font.render(f"Player: {name}", True, YELLOW)
+    text_width = text_surface.get_width()
+    dis.blit(text_surface, (DIS_WIDTH - text_width , 10))
 
 # Display score
 def your_score(score):
-    value = score_font.render("Your Score: " + str(score), True, YELLOW)
+    value = score_font.render("Your Score: " + str(score), True, YELLOW) 
     dis.blit(value, [0, 0])
+    draw_player_name(player_name)
+ 
 
 # Display message
 def message(msg, color):
     mesg = font_style.render(msg, True, color)
     dis.blit(mesg, [DIS_WIDTH / 6, DIS_HEIGHT / 3])
-
+    
+    
+        
 # Game loop
 def gameLoop():
     game_over = False
@@ -105,6 +127,8 @@ def gameLoop():
             dis.fill(BLUE)
             message("You Lost! Press Q-Quit or C-Play Again", RED)
             your_score(length_of_snake - 1)
+            
+            
             pygame.display.update()
 
             for event in pygame.event.get():
