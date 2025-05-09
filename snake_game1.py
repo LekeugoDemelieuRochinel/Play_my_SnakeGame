@@ -43,7 +43,7 @@ player_name = input("Please Enter you name: ")
 # Load sounds with error handling
 try:
     eat_sound = pygame.mixer.Sound("mamge.mp3")
-    eat_sound.play()
+    # eat_sound.play()
     
     game_over_sound = pygame.mixer.Sound("game_over.wav")
 except pygame.error as e:
